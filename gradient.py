@@ -120,5 +120,32 @@ class Gradient:
 if __name__ == '__main__':
 	gradient = Gradient()
 	gradient.create_frame()
-	gradient.create_frame(255, 255, 255)
-	print(gradient.apply('test'))  # You can put here any string
+
+	import pandas as pd
+
+	sf = pd.read_csv('gradient.csv',usecols=['Values'])
+
+	gr_r = sf.iloc[0,0]
+	gr_g = sf.iloc[1,0]
+	gr_b = sf.iloc[2,0]
+
+	if str(gr_r) == 'nan':
+		raise TypeError('"Red" is empty')
+	elif str(gr_g) == 'nan':
+		raise TypeError('"Green" is empty')
+	elif str(gr_b) == 'nan':
+		raise TypeError('"Blue" is empty')
+
+	name = sf.iloc[3,0]
+
+	gradient.create_frame(int(gr_r), int(gr_g), int(gr_b))
+
+	if str(name) == 'nan':
+		raise TypeError('"Name" is empty')
+
+	print(gradient.apply(name))
+	print('Saved in "gradient.txt"')
+
+	file_save = open('gradient.txt', 'w')
+	file_save.write(gradient.apply(name))
+	file_save.close()
